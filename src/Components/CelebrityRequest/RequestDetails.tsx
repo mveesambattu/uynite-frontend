@@ -1,7 +1,11 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../store/store";
+import { updateVerificationStatus, revokeCelebrityStatus } from "../store/celebrityRequestSlice";
 
 type RequestDetailsProps = {
   requestData: {
+    id: string;
     name: string;
     email: string;
     category: string;
@@ -11,24 +15,36 @@ type RequestDetailsProps = {
     links: { label: string; url: string }[];
     imageUrl: string;
   };
-  onAccept: () => void; // Callback for external actions, if needed
-  onDecline: () => void; // Callback for external actions, if needed
 };
 
-const RequestDetails: React.FC<RequestDetailsProps> = ({
-  requestData,
-  onAccept,
-  onDecline,
-}) => {
+const RequestDetails: React.FC<RequestDetailsProps> = ({ requestData }) => {
+  const dispatch = useDispatch<AppDispatch>();
   const [isAccepted, setIsAccepted] = useState(false);
 
-  const { name, email, category, about, governmentId, professionalId, links, imageUrl } =
-    requestData;
+  const { id, name, email, category, about, governmentId, professionalId, links, imageUrl } = requestData;
 
   // Accept handler
   const handleAccept = () => {
+    dispatch(
+      updateVerificationStatus({
+        profileid: id,
+        verificationstatus: "verified",
+        rejectReason: "",
+        comments: "Profile verified successfully.",
+      })
+    );
     setIsAccepted(true); // Update the button text to "Accepted"
-    onAccept(); // Trigger the external callback (optional)
+  };
+
+  // Remove Celebrity Status handler
+  const handleRemoveCelebrityStatus = () => {
+    dispatch(
+      revokeCelebrityStatus({
+        profileId: id,
+        newStatus: "rejected",
+        reason: "Admin decision to revoke status.",
+      })
+    );
   };
 
   return (
@@ -111,13 +127,12 @@ const RequestDetails: React.FC<RequestDetailsProps> = ({
           {isAccepted ? "Accepted" : "Accept"}
         </button>
 
-        {/* Decline Button */}
+        {/* Remove Celebrity Status Button */}
         <button
-          onClick={onDecline}
+          onClick={handleRemoveCelebrityStatus}
           className="w-1/2 bg-red-500 text-white py-2 px-6 rounded-md hover:bg-red-600 shadow-md text-center"
         >
-            {isAccepted ? "Remove Celebrity Status" : "Decline"}
-          
+          Remove Celebrity Status
         </button>
       </div>
     </div>

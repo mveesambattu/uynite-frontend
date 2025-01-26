@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Content from "../Content";
 import BreadcrumbsWithFilter from "../Breadcrumbs";
 import RequestCard from "../Common/RequestCard";
@@ -6,8 +6,13 @@ import Sidebar from "../Sidebar";
 import Dropdown from "../Common/Dropdown";
 import RequestDetails from "./RequestDetails";
 import Modal from "../Common/Modal";
+import { getFilteredVerifications } from "../store/celebrityRequestSlice";
+import { AppDispatch, RootState } from "../store/store";
+import { useDispatch, useSelector } from "react-redux";
 
 const CelebrityRequest: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+
   const breadcrumbLinks = [
     { label: "Dashboard", path: "/" },
     { label: "Celebrity Request", path: "/celebrity-request" },
@@ -18,11 +23,20 @@ const CelebrityRequest: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [reason, setReason] = useState("");
 
-  const profiles = [
+  const { data: profiles, status } = useSelector(
+    (state: RootState) => state.celebrityRequest
+  );
+
+  useEffect(() => {
+    dispatch(getFilteredVerifications({ filter: "all", index: 0, size: 10 }));
+  }, [dispatch]);
+
+  const staticprofiles = [
     { id: "1", name: "Nikki Thomas", role: "Blogger", status: "Verified", imageUrl: "https://randomuser.me/api/portraits/men/64.jpg" },
     { id: "2", name: "Jane Doe", role: "Photographer", status: "Pending", imageUrl: "https://randomuser.me/api/portraits/men/65.jpg" },
     { id: "3", name: "John Smith", role: "Writer", status: "Approved", imageUrl: "https://randomuser.me/api/portraits/men/66.jpg" },
   ];
+
 
   const options = [
     { value: "all", label: "All" },
@@ -32,7 +46,7 @@ const CelebrityRequest: React.FC = () => {
   ];
 
   // Filter profiles based on dropdown selection
-  const filteredProfiles = profiles.filter((profile) => {
+  const filteredProfiles = staticprofiles.filter((profile) => {
     if (selectedValue === "all") return true;
     return profile.status.toLowerCase() === selectedValue;
   });
@@ -105,8 +119,6 @@ const CelebrityRequest: React.FC = () => {
           {selectedProfile ? (
             <RequestDetails
               requestData={selectedProfile}
-              onAccept={handleAccept}
-              onDecline={handleDecline}
             />
           ) : (
             <p className="text-gray-500">Select a profile to view details.</p>
