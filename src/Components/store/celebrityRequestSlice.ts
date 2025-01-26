@@ -1,35 +1,34 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import api from "./api"; 
 
-interface CelebrityState {
-  data: any;
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+interface CelebrityRequestState {
+  data: any | null;
+  status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
 
-const initialState: CelebrityState = {
+const initialState: CelebrityRequestState = {
   data: null,
-  status: 'idle',
+  status: "idle",
   error: null,
 };
 
-// API 1: Update Verification Status
+// Thunks
+
+// 1. Update Verification Status
 export const updateVerificationStatus = createAsyncThunk(
-  'celebrityRequest/updateVerificationStatus',
+  "celebrityRequest/updateVerificationStatus",
   async (
     payload: {
       profileid: string;
-      verificationstatus: 'verified' | 'rejected' | 'pending';
+      verificationstatus: "verified" | "rejected" | "pending";
       rejectReason: string;
       comments: string;
     },
     { rejectWithValue }
   ) => {
     try {
-      const response = await axios.post(
-        'https://yc66dd7dug.execute-api.us-east-2.amazonaws.com/profile/api/celebrity/admin/verify/update',
-        payload
-      );
+      const response = await api.post("/celebrity/admin/verify/update", payload);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data || error.message);
@@ -37,18 +36,15 @@ export const updateVerificationStatus = createAsyncThunk(
   }
 );
 
-// API 2: Get Filtered Verifications
+// 2. Get Filtered Verifications
 export const getFilteredVerifications = createAsyncThunk(
-  'celebrityRequest/getFilteredVerifications',
+  "celebrityRequest/getFilteredVerifications",
   async (
-    params: { filter: 'all' | 'verified' | 'submitted' | 'rejected'; index: number; size: number },
+    params: { filter: "all" | "verified" | "submitted" | "rejected"; index: number; size: number },
     { rejectWithValue }
   ) => {
     try {
-      const response = await axios.get(
-        'https://yc66dd7dug.execute-api.us-east-2.amazonaws.com/profile/api/celebrity/admin/verify/getFiltered',
-        { params }
-      );
+      const response = await api.get("/celebrity/admin/verify/getFiltered", { params });
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data || error.message);
@@ -56,16 +52,16 @@ export const getFilteredVerifications = createAsyncThunk(
   }
 );
 
-// API 3: Revoke Celebrity Status
+// 3. Revoke Celebrity Status
 export const revokeCelebrityStatus = createAsyncThunk(
-  'celebrityRequest/revokeCelebrityStatus',
+  "celebrityRequest/revokeCelebrityStatus",
   async (
-    payload: { profileId: string; newStatus: 'accepted' | 'rejected' | 'pending'; reason?: string },
+    payload: { profileId: string; newStatus: string; reason?: string },
     { rejectWithValue }
   ) => {
     try {
-      const response = await axios.put(
-        `https://yc66dd7dug.execute-api.us-east-2.amazonaws.com/profile/api/celebrity/admin/verify/revoke/${payload.profileId}`,
+      const response = await api.put(
+        `/celebrity/admin/verify/revoke/${payload.profileId}`,
         null,
         { params: { newStatus: payload.newStatus, reason: payload.reason } }
       );
@@ -76,57 +72,46 @@ export const revokeCelebrityStatus = createAsyncThunk(
   }
 );
 
+// Slice
 const celebrityRequestSlice = createSlice({
-  name: 'celebrityRequest',
+  name: "celebrityRequest",
   initialState,
-  reducers: {
-    resetStatus(state) {
-      state.status = 'idle';
-      state.error = null;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
-    // Update Verification Status
-    builder.addCase(updateVerificationStatus.pending, (state) => {
-      state.status = 'loading';
-    });
-    builder.addCase(updateVerificationStatus.fulfilled, (state, action) => {
-      state.status = 'succeeded';
-      state.data = action.payload;
-    });
-    builder.addCase(updateVerificationStatus.rejected, (state, action) => {
-      state.status = 'failed';
-      state.error = action.payload as string;
-    });
-
-    // Get Filtered Verifications
-    builder.addCase(getFilteredVerifications.pending, (state) => {
-      state.status = 'loading';
-    });
-    builder.addCase(getFilteredVerifications.fulfilled, (state, action) => {
-      state.status = 'succeeded';
-      state.data = action.payload;
-    });
-    builder.addCase(getFilteredVerifications.rejected, (state, action) => {
-      state.status = 'failed';
-      state.error = action.payload as string;
-    });
-
-    // Revoke Celebrity Status
-    builder.addCase(revokeCelebrityStatus.pending, (state) => {
-      state.status = 'loading';
-    });
-    builder.addCase(revokeCelebrityStatus.fulfilled, (state, action) => {
-      state.status = 'succeeded';
-      state.data = action.payload;
-    });
-    builder.addCase(revokeCelebrityStatus.rejected, (state, action) => {
-      state.status = 'failed';
-      state.error = action.payload as string;
-    });
+    // Handle state changes for all async actions
+    builder
+      .addCase(getFilteredVerifications.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getFilteredVerifications.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(getFilteredVerifications.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      })
+      .addCase(updateVerificationStatus.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(updateVerificationStatus.fulfilled, (state) => {
+        state.status = "succeeded";
+      })
+      .addCase(updateVerificationStatus.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      })
+      .addCase(revokeCelebrityStatus.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(revokeCelebrityStatus.fulfilled, (state) => {
+        state.status = "succeeded";
+      })
+      .addCase(revokeCelebrityStatus.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      });
   },
 });
-
-export const { resetStatus } = celebrityRequestSlice.actions;
 
 export default celebrityRequestSlice.reducer;
