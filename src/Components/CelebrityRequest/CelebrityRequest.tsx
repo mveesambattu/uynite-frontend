@@ -27,6 +27,7 @@ const CelebrityRequest: React.FC = () => {
     (state: RootState) => state.celebrityRequest
   );
 
+  console.log(profiles)
   useEffect(() => {
     dispatch(getFilteredVerifications({ filter: "all", index: 0, size: 10 }));
   }, [dispatch]);

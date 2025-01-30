@@ -13,8 +13,6 @@ const initialState: CelebrityRequestState = {
   error: null,
 };
 
-// Thunks
-
 // 1. Update Verification Status
 export const updateVerificationStatus = createAsyncThunk(
   "celebrityRequest/updateVerificationStatus",
