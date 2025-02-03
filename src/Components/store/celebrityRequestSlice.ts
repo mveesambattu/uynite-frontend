@@ -85,11 +85,12 @@ export const updateVerificationStatus = createAsyncThunk(
         token = await fetchAuthTokenFunction();
         dispatch(setToken(token));
       }
+      const language = navigator.language || "en-US";
 
       const response = await axios.post(
         `${API_BASE_URL}/profile/api/celebrity/admin/verify/update`,
         payload,
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}`, "Accept-Language": language, } }
       );
       return response.data;
     } catch (error: unknown) {
@@ -116,12 +117,13 @@ export const revokeCelebrityStatus = createAsyncThunk(
         token = await fetchAuthTokenFunction();
         dispatch(setToken(token));
       }
+      const language = navigator.language || "en-US";
 
       const response = await axios.put(
         `${API_BASE_URL}/profile/api/celebrity/admin/verify/revoke/${payload.profileId}`,
         null,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${token}`,"Accept-Language": language, },
           params: { newStatus: payload.newStatus, reason: payload.reason },
         }
       );

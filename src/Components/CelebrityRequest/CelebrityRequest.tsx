@@ -26,7 +26,7 @@ const CelebrityRequest: React.FC = () => {
   const { fetchStatus, data, error } = useSelector(
     (state: RootState) => state.celebrityRequest
   );
-console.log(data)
+console.log(data && data[0])
   // Dispatch the thunk when the component mounts or when filter criteria change.
   useEffect(() => {
     if (fetchStatus === "idle") {
