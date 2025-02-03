@@ -5,10 +5,13 @@ const API_BASE_URL = "https://yc66dd7dug.execute-api.us-east-2.amazonaws.com";
 // Function to fetch authentication token
 const fetchAuthToken = async () => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/api/admin/auth/authenticate`, {
-      username: "lsurisetti@uynite.com",
-      password: "adminpassword",
-    });
+    const response = await axios.post(
+      `${API_BASE_URL}/api/admin/auth/authenticate`,
+      {
+        username: "lsurisetti@uynite.com",
+        password: "adminpassword",
+      }
+    );
     return response.data.token; // Assuming token is returned as response.data.token
   } catch (error) {
     console.error("Failed to get authentication token:", error);
