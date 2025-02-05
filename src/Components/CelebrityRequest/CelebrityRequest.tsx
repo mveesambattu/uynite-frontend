@@ -26,24 +26,21 @@ const CelebrityRequest: React.FC = () => {
   const { fetchStatus, data, error } = useSelector(
     (state: RootState) => state.celebrityRequest
   );
-console.log(data && data[0])
-  // Dispatch the thunk when the component mounts or when filter criteria change.
+
   useEffect(() => {
     if (fetchStatus === "idle") {
       dispatch(getFilteredVerifications({ filter: "all", index: 0, size: 10 }));
     }
   }, [dispatch, fetchStatus]);
 
-  // If the API returns data, use it. Otherwise, show a message.
   const profiles = data || [];
 
   // Filter profiles based on dropdown selection.
   const filteredProfiles = profiles.filter((profile: any) => {
     if (selectedValue === "all") return true;
-    return profile.status.toLowerCase() === selectedValue;
+    return profile.verificationstatus.toLowerCase() === selectedValue;
   });
 
-  // Handle card click to set the selected profile.
   const handleCardClick = (profile: any) => {
     setSelectedProfile(profile);
   };
@@ -60,15 +57,15 @@ console.log(data && data[0])
 
   return (
     <div className="flex min-h-screen bg-gray-100 pt-8">
-      {/* Fixed Sidebar */}
       <Sidebar title="Celebrity Request" subtitle="">
         <div className="flex justify-end p-2 mt-5">
           <Dropdown
             options={[
               { value: "all", label: "All" },
-              { value: "pending", label: "Pending" },
+              { value: "submitted", label: "Submitted" },
               { value: "verified", label: "Verified" },
               { value: "approved", label: "Approved" },
+              { value: "rejected", label: "Rejected" },
             ]}
             selectedValue={selectedValue}
             onChange={(value) => setSelectedValue(value)}
@@ -94,16 +91,15 @@ console.log(data && data[0])
             className="cursor-pointer"
           >
             <RequestCard
-              name={profile.name}
-              role={profile.role}
-              status={profile.status}
-              imageUrl={profile.imageUrl}
+              name={profile.email.split('@')[0]} // Display only email username
+              role={profile.category}
+              status={profile.verificationstatus}
+              imageUrl={profile.govid1} // Displaying the first government ID image
             />
           </div>
         ))}
       </Sidebar>
 
-      {/* Main Content */}
       <div className="ml-[25%] flex-grow p-6 pt-12">
         <BreadcrumbsWithFilter links={breadcrumbLinks} />
         <Content>
