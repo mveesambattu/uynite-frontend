@@ -1,27 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import BreadcrumbsWithFilter from "../Breadcrumbs";
 import Table from "../Table";
 import ActionModal from "./ActionModal";
 import { AppDispatch, RootState } from "../store/store";
-import { blockUser, deletePost, deleteUser, rejectReport } from "../store/reportsSlice";
+import { fetchReports, blockUser, deletePost, deleteUser, rejectReport } from "../store/reportsSlice";
 
 const Reports: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const reports = useSelector((state: RootState) => state.reports.reports);
+  const fetchStatus = useSelector((state: RootState) => state.reports.fetchStatus);
+
   const [selectedAction, setSelectedAction] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedReportId, setSelectedReportId] = useState<string | null>(null);
 
-  // Handle Action Selection in Dropdown
+  useEffect(() => {
+    if (fetchStatus === "idle") {
+      dispatch(fetchReports());
+    }
+  }, [dispatch, fetchStatus]);
+
   const handleActionChange = (reportId: string, action: string) => {
     setSelectedAction(action);
     setSelectedReportId(reportId);
     setModalOpen(true);
   };
 
-  // Dispatch the relevant action when user confirms in modal
   const handleConfirmAction = (reason: string) => {
     if (!selectedReportId || !selectedAction) return;
 
@@ -46,7 +52,6 @@ const Reports: React.FC = () => {
     setModalOpen(false);
   };
 
-  // Table Column Definitions
   const columns = [
     { key: "reportedBy", label: "Reported By" },
     { key: "reportType", label: "Report Type" },
@@ -57,12 +62,11 @@ const Reports: React.FC = () => {
     { key: "actions", label: "Actions" },
   ];
 
-  // Prepare Table Data
   const tableData = reports.map((report) => ({
     reportedBy: () => (
       <div className="flex items-center">
-        <img src={report.ReportedBy.Image} alt={report.ReportedBy.Name} className="w-10 h-10 rounded-full mr-3" />
-        <p>{report.ReportedBy.Name}</p>
+        <img src={report.ReportedBy[0].Image} alt={report.ReportedBy[0].Name} className="w-10 h-10 rounded-full mr-3" />
+        <p>{report.ReportedBy[0].Name}</p>
       </div>
     ),
     reportType: report.ReportType,
@@ -104,9 +108,14 @@ const Reports: React.FC = () => {
 
       <h1 className="text-3xl font-bold text-gray-700 mt-6 mb-4">Reports</h1>
 
-      <Table columns={columns} data={tableData} />
+      {fetchStatus === "loading" ? (
+        <p>Loading reports...</p>
+      ) : fetchStatus === "failed" ? (
+        <p className="text-red-500">Failed to load reports.</p>
+      ) : (
+        <Table columns={columns} data={tableData} />
+      )}
 
-      {/* Action Modal */}
       <ActionModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
