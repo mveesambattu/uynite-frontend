@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import BreadcrumbsWithFilter from "../Breadcrumbs";
 import Table from "../Table";
 import ActionModal from "./ActionModal";
@@ -15,12 +14,20 @@ const Reports: React.FC = () => {
   const [selectedAction, setSelectedAction] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedReportId, setSelectedReportId] = useState<string | null>(null);
+  const [page, setPage] = useState(0);
+  const [size, setSize] = useState(10);
 
   useEffect(() => {
-    if (fetchStatus === "idle") {
-      dispatch(fetchReports());
-    }
-  }, [dispatch, fetchStatus]);
+    dispatch(fetchReports({ page, size }));
+  }, [dispatch, page, size]);
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSize(Number(event.target.value));
+  };
 
   const handleActionChange = (reportId: string, action: string) => {
     setSelectedAction(action);
@@ -28,7 +35,7 @@ const Reports: React.FC = () => {
     setModalOpen(true);
   };
 
-  const handleConfirmAction = (reason: string) => {
+  const handleConfirmAction = () => {
     if (!selectedReportId || !selectedAction) return;
 
     switch (selectedAction) {
@@ -52,37 +59,41 @@ const Reports: React.FC = () => {
     setModalOpen(false);
   };
 
+  const formatDate = (timestamp: number | null) => {
+    if (!timestamp) return "N/A";
+    return new Date(timestamp).toLocaleString();
+  };
+
   const columns = [
     { key: "reportedBy", label: "Reported By" },
     { key: "reportType", label: "Report Type" },
     { key: "reportMessage", label: "Report Message" },
     { key: "reportedContent", label: "Reported Content" },
-    { key: "itemPostedBy", label: "Item Posted By" },
+    { key: "status", label: "Status" },
     { key: "createdDate", label: "Created Date" },
     { key: "actions", label: "Actions" },
   ];
 
-  const tableData = reports.map((report) => ({
+  const tableData = reports.map((report: any) => ({
     reportedBy: () => (
       <div className="flex items-center">
-        <img src={report.ReportedBy[0].Image} alt={report.ReportedBy[0].Name} className="w-10 h-10 rounded-full mr-3" />
-        <p>{report.ReportedBy[0].Name}</p>
+        <img
+          src={report.reportedByProfile?.pimage || "https://via.placeholder.com/40"}
+          alt={report.reportedByProfile?.fname || "Unknown"}
+          className="w-10 h-10 rounded-full mr-3"
+        />
+        <p>{`${report.reportedByProfile?.fname || "Unknown"} ${report.reportedByProfile?.lname || ""}`}</p>
       </div>
     ),
-    reportType: report.ReportType,
-    reportMessage: report.ReportMessage,
+    reportType: report.reportType,
+    reportMessage: report.reportMessage,
     reportedContent: () => (
-      <a href={report.ReportedContent.Link} className="text-blue-500 underline" target="_blank" rel="noopener noreferrer">
-        {report.ReportedContent.Type}
+      <a href={report.reportedContentUrl} className="text-blue-500 underline" target="_blank" rel="noopener noreferrer">
+        {report.reportedContentType}
       </a>
     ),
-    itemPostedBy: () => (
-      <div className="flex items-center">
-        <img src={report.ItemPostedBy.Image} alt={report.ItemPostedBy.Name} className="w-10 h-10 rounded-full mr-3" />
-        <p>{report.ItemPostedBy.Name}</p>
-      </div>
-    ),
-    createdDate: report.CreatedDate,
+    status: report.status,
+    createdDate: formatDate(report.createdDate),
     actions: () => (
       <div>
         <select
@@ -107,6 +118,29 @@ const Reports: React.FC = () => {
       <BreadcrumbsWithFilter links={[{ label: "Dashboard", path: "/" }, { label: "Reports", path: "/reports" }]} />
 
       <h1 className="text-3xl font-bold text-gray-700 mt-6 mb-4">Reports</h1>
+
+      <div className="flex justify-between mb-4">
+        <div>
+          <label className="mr-2">Records per page:</label>
+          <select className="border px-2 py-1 rounded" value={size} onChange={handleSizeChange}>
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={50}>50</option>
+          </select>
+        </div>
+        <div>
+          <button
+            className="px-4 py-2 mr-2 bg-gray-300 rounded"
+            disabled={page === 0}
+            onClick={() => handlePageChange(page - 1)}
+          >
+            Previous
+          </button>
+          <button className="px-4 py-2 bg-blue-500 text-white rounded" onClick={() => handlePageChange(page + 1)}>
+            Next
+          </button>
+        </div>
+      </div>
 
       {fetchStatus === "loading" ? (
         <p>Loading reports...</p>
