@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import BreadcrumbsWithFilter from "../Breadcrumbs";
 import SidebarMenu from "../SidebarMenu";
 import EventCard from "../EventCard";
@@ -8,44 +9,86 @@ const SponsoredEvent: React.FC = () => {
     { label: "Dashboard", path: "/" },
     { label: "Sponsored Event", path: "/sponsored-event" },
   ];
+  const navigate = useNavigate();
 
   const [activeMenu, setActiveMenu] = useState("Create Event and list");
-  const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [visibleEvents, setVisibleEvents] = useState<{ title: string; location: string; category: string }[]>([]);
+  const [visibleEvents, setVisibleEvents] = useState<any[]>([]); // Store visible events
+  const [createdEvents, setCreatedEvents] = useState<any[]>([
+    {
+      eventName: "Music Festival 2024",
+      country: "USA",
+      scheduleType: "Up Comming Event",
+      postType: "Video",
+      rootsPosters: ["rootPoster1.jpg", "rootPoster2.jpg"],
+      eventPosters: ["eventPoster1.jpg", "eventPoster2.jpg"],
+      termsImage: "termsImage.jpg",
+      fromDate: "01 Jan 2024, 10:00 AM",
+      toDate: "05 Jan 2024, 10:00 AM",
+      category: "Up Comming Events",
+    },
+    {
+      eventName: "Tech Innovation Awards",
+      country: "India",
+      scheduleType: "On-Going Event",
+      postType: "Image",
+      rootsPosters: ["techAwardRoot1.jpg"],
+      eventPosters: ["techAwardEvent1.jpg"],
+      termsImage: "techAwardTerms.jpg",
+      fromDate: "10 Mar 2024, 09:00 AM",
+      toDate: "15 Mar 2024, 06:00 PM",
+      category: "On Going Event",
+    },
+    {
+      eventName: "Startup Pitch Fest",
+      country: "Europe",
+      scheduleType: "Completed Event",
+      postType: "Text",
+      rootsPosters: ["pitchFestRoot1.jpg"],
+      eventPosters: ["pitchFestEvent1.jpg"],
+      termsImage: "pitchFestTerms.jpg",
+      fromDate: "20 Dec 2023, 10:00 AM",
+      toDate: "25 Dec 2023, 10:00 AM",
+      category: "Completed Events",
+    },
+  ]);
 
-  const allEvents = [
-    { title: "Cute Baby Contest", location: "All Countries", category: "Up Comming Events" },
-    { title: "Best Photography Contest", location: "Japan", category: "On Going Event" },
-    { title: "Beauty Contest", location: "2+ Countries", category: "Completed Events" },
-    { title: "Music Fest 2024", location: "USA", category: "Up Comming Events" },
-    { title: "Tech Innovation Awards", location: "India", category: "Completed Events" },
-    { title: "Startup Pitch Fest", location: "Europe", category: "On Going Event" },
-  ];
-
+  // Effect to filter events based on active menu
   useEffect(() => {
     if (activeMenu === "Create Event and list") {
-      setVisibleEvents(allEvents);
+      setVisibleEvents(createdEvents); // Show all created events
     } else {
-      const filtered = allEvents.filter(event => event.category === activeMenu);
-      setVisibleEvents(filtered);
+      const normalizedActiveMenu = activeMenu.toLowerCase().replace(/ /g, ""); // Normalize activeMenu
+      const filtered = createdEvents.filter(event =>
+        event.category.toLowerCase().replace(/ /g, "") === normalizedActiveMenu
+      );
+      setVisibleEvents(filtered); // Show events based on normalized category
     }
-  }, [activeMenu]);
+  }, [activeMenu, createdEvents]);
 
+  // Handle menu selection (filtering events by category)
   const handleMenuClick = (menuLabel: string) => {
-    setActiveMenu(menuLabel);
-    setSelectedEvent(null);
+    // Adjust the path to be based on the active menu
+    const path = menuLabel === "" ? "/sponsored-event" : `/sponsored-event/${menuLabel}`;
+    navigate(path);
+    setActiveMenu(menuLabel); // Update the active menu state
   };
 
+  // Navigate to event details
+  const handleEventDetails = (event: any) => {
+    navigate("event-details", { state: { event } }); // Pass event data via state
+  };
+
+  // Menu items for filtering events by category
   const menuItems = [
-    { label: "Create Event and list", onClick: () => handleMenuClick("Create Event and list"), active: activeMenu === "Create Event and list" },
-    { label: "Up Comming Events", onClick: () => handleMenuClick("Up Comming Events"), active: activeMenu === "Up Comming Events" },
-    { label: "On Going Event", onClick: () => handleMenuClick("On Going Event"), active: activeMenu === "On Going Event" },
-    { label: "Completed Events", onClick: () => handleMenuClick("Completed Events"), active: activeMenu === "Completed Events" },
+    { label: "Create Event and list", onClick: () => handleMenuClick("events-list") },
+    { label: "Up Comming Events", onClick: () => handleMenuClick("upcoming-events") },
+    { label: "On Going Event", onClick: () => handleMenuClick("ongoing-events") },
+    { label: "Completed Events", onClick: () => handleMenuClick("completed-events") },
   ];
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
+      {/* Breadcrumb Navigation */}
       <BreadcrumbsWithFilter links={breadcrumbLinks} />
 
       <div className="mt-4 grid grid-cols-1 lg:grid-cols-4 gap-4">
@@ -54,61 +97,28 @@ const SponsoredEvent: React.FC = () => {
           <SidebarMenu menuItems={menuItems} />
         </div>
 
-        {/* Event List or Event Detail View */}
+        {/* Event List */}
         <div className="col-span-2 bg-white rounded shadow p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold">{activeMenu}</h2>
-            {activeMenu === "Create Event and list" && (
-              <button 
-                className="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 transition"
-                onClick={() => setIsModalOpen(true)}
-                title="Click to create a new event"
-              >
-                Create Event
-              </button>
-            )}
-          </div>
-
+         
+          <Outlet />
+{/* 
           {visibleEvents.length > 0 ? (
             visibleEvents.map((event, index) => (
-              <EventCard 
-                key={index} 
-                title={event.title} 
-                location={event.location} 
-                onClick={() => setSelectedEvent(event.title)} 
+              <EventCard
+                key={index}
+                title={event.eventName}
+                location={event.country}
+                handleEventClick={() => handleEventDetails(event)} 
               />
             ))
           ) : (
             <p className="text-gray-600 text-center">No events available.</p>
-          )}
+          )} */}
         </div>
       </div>
 
-      {/* Event Creation Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
-            <h2 className="text-xl font-semibold mb-4">Create New Event</h2>
-            <input 
-              type="text" 
-              placeholder="Event Name" 
-              className="w-full p-2 border rounded mb-3"
-            />
-            <button 
-              className="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600 transition"
-              onClick={() => setIsModalOpen(false)}
-            >
-              Save Event
-            </button>
-            <button 
-              className="ml-2 bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600 transition"
-              onClick={() => setIsModalOpen(false)}
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Outlet for nested routes */}
+      
     </div>
   );
 };

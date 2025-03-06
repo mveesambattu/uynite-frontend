@@ -1,0 +1,179 @@
+{
+    "completedEvents": [
+      {
+        "eventName": "Global Tech Summit 2023",
+        "country": "USA",
+        "scheduleType": "Completed Event",
+        "postType": "Image",
+        "rootsPosters": ["https://placehold.co/600x400/000000/FFF?text=techSummit1", "https://placehold.co/600x400/000000/FFF?text=techSummit2"],
+        "eventPosters": ["https://placehold.co/600x400/000000/FFF?text=techSummitEvent1", "https://placehold.co/600x400/000000/FFF?text=techSummitEvent2"],
+        "termsImage": "https://placehold.co/600x400/000000/FFF?text=techSummitTerms",
+        "fromDate": "01 Dec 2023, 10:00 AM",
+        "toDate": "05 Dec 2023, 06:00 PM",
+        "category": "Completed Events"
+      },
+      {
+        "eventName": "E-commerce Expo 2023",
+        "country": "UK",
+        "scheduleType": "Completed Event",
+        "postType": "Text",
+        "rootsPosters": ["https://placehold.co/600x400/000000/FFF?text=ecommerceExpo1"],
+        "eventPosters": ["https://placehold.co/600x400/000000/FFF?text=ecommerceExpoEvent1"],
+        "termsImage": "https://placehold.co/600x400/000000/FFF?text=ecommerceExpoTerms",
+        "fromDate": "10 Nov 2023, 08:00 AM",
+        "toDate": "12 Nov 2023, 05:00 PM",
+        "category": "Completed Events"
+      },
+      {
+        "eventName": "Green Energy Conference 2023",
+        "country": "Canada",
+        "scheduleType": "Completed Event",
+        "postType": "Image",
+        "rootsPosters": ["https://placehold.co/600x400/000000/FFF?text=greenEnergy1"],
+        "eventPosters": ["https://placehold.co/600x400/000000/FFF?text=greenEnergyEvent1"],
+        "termsImage": "https://placehold.co/600x400/000000/FFF?text=greenEnergyTerms",
+        "fromDate": "05 Nov 2023, 09:00 AM",
+        "toDate": "10 Nov 2023, 05:00 PM",
+        "category": "Completed Events"
+      }
+    ],
+    "ongoingEvents": [
+      {
+        "eventName": "AI and Robotics Conference 2024",
+        "country": "Germany",
+        "scheduleType": "On-Going Event",
+        "postType": "Video",
+        "rootsPosters": ["https://placehold.co/600x400/000000/FFF?text=aiRobotics1", "https://placehold.co/600x400/000000/FFF?text=aiRobotics2"],
+        "eventPosters": ["https://placehold.co/600x400/000000/FFF?text=aiRoboticsEvent1", "https://placehold.co/600x400/000000/FFF?text=aiRoboticsEvent2"],
+        "termsImage": "https://placehold.co/600x400/000000/FFF?text=aiRoboticsTerms",
+        "fromDate": "01 Feb 2024, 09:00 AM",
+        "toDate": "28 Feb 2024, 06:00 PM",
+        "category": "On Going Event"
+      },
+      {
+        "eventName": "Blockchain World Summit 2024",
+        "country": "Singapore",
+        "scheduleType": "On-Going Event",
+        "postType": "Image",
+        "rootsPosters": ["https://placehold.co/600x400/000000/FFF?text=blockchainSummit1", "https://placehold.co/600x400/000000/FFF?text=blockchainSummit2"],
+        "eventPosters": ["https://placehold.co/600x400/000000/FFF?text=blockchainSummitEvent1", "https://placehold.co/600x400/000000/FFF?text=blockchainSummitEvent2"],
+        "termsImage": "https://placehold.co/600x400/000000/FFF?text=blockchainSummitTerms",
+        "fromDate": "15 Jan 2024, 10:00 AM",
+        "toDate": "20 Jan 2024, 07:00 PM",
+        "category": "On Going Event"
+      },
+      {
+        "eventName": "Digital Health Expo 2024",
+        "country": "USA",
+        "scheduleType": "On-Going Event",
+        "postType": "Text",
+        "rootsPosters": ["https://placehold.co/600x400/000000/FFF?text=digitalHealthExpo1"],
+        "eventPosters": ["https://placehold.co/600x400/000000/FFF?text=digitalHealthExpoEvent1"],
+        "termsImage": "https://placehold.co/600x400/000000/FFF?text=digitalHealthExpoTerms",
+        "fromDate": "01 Feb 2024, 08:00 AM",
+        "toDate": "05 Feb 2024, 04:00 PM",
+        "category": "On Going Event"
+      }
+    ],
+    "upcomingEvents": [
+      {
+        "eventName": "Web3 Developers Summit 2025",
+        "country": "Canada",
+        "scheduleType": "Up Comming Event",
+        "postType": "Text",
+        "rootsPosters": ["https://placehold.co/600x400/000000/FFF?text=web3Summit1", "https://placehold.co/600x400/000000/FFF?text=web3Summit2"],
+        "eventPosters": ["https://placehold.co/600x400/000000/FFF?text=web3SummitEvent1", "https://placehold.co/600x400/000000/FFF?text=web3SummitEvent2"],
+        "termsImage": "https://placehold.co/600x400/000000/FFF?text=web3SummitTerms",
+        "fromDate": "01 May 2025, 09:00 AM",
+        "toDate": "05 May 2025, 06:00 PM",
+        "category": "Up Comming Events"
+      },
+      {
+        "eventName": "Digital Marketing Conference 2025",
+        "country": "Australia",
+        "scheduleType": "Up Comming Event",
+        "postType": "Video",
+        "rootsPosters": ["https://placehold.co/600x400/000000/FFF?text=digitalMarketing1", "https://placehold.co/600x400/000000/FFF?text=digitalMarketing2"],
+        "eventPosters": ["https://placehold.co/600x400/000000/FFF?text=digitalMarketingEvent1", "https://placehold.co/600x400/000000/FFF?text=digitalMarketingEvent2"],
+        "termsImage": "https://placehold.co/600x400/000000/FFF?text=digitalMarketingTerms",
+        "fromDate": "20 Jun 2025, 10:00 AM",
+        "toDate": "25 Jun 2025, 05:00 PM",
+        "category": "Up Comming Events"
+      },
+      {
+        "eventName": "Virtual Reality Expo 2025",
+        "country": "Japan",
+        "scheduleType": "Up Comming Event",
+        "postType": "Image",
+        "rootsPosters": ["https://placehold.co/600x400/000000/FFF?text=vrExpo1", "https://placehold.co/600x400/000000/FFF?text=vrExpo2"],
+        "eventPosters": ["https://placehold.co/600x400/000000/FFF?text=vrExpoEvent1", "https://placehold.co/600x400/000000/FFF?text=vrExpoEvent2"],
+        "termsImage": "https://placehold.co/600x400/000000/FFF?text=vrExpoTerms",
+        "fromDate": "15 Aug 2025, 09:00 AM",
+        "toDate": "20 Aug 2025, 06:00 PM",
+        "category": "Up Comming Events"
+      }
+    ],
+    "createdEvents": [
+      {
+        "eventName": "Music Festival 2024",
+        "country": "USA",
+        "scheduleType": "Up Comming Event",
+        "postType": "Video",
+        "rootsPosters": ["https://placehold.co/600x400/000000/FFF?text=rootPoster1", "https://placehold.co/600x400/000000/FFF?text=rootPoster2"],
+        "eventPosters": ["https://placehold.co/600x400/000000/FFF?text=eventPoster1", "https://placehold.co/600x400/000000/FFF?text=eventPoster2"],
+        "termsImage": "https://placehold.co/600x400/000000/FFF?text=termsImage",
+        "fromDate": "01 Jan 2024, 10:00 AM",
+        "toDate": "05 Jan 2024, 10:00 AM",
+        "category": "Up Comming Events"
+      },
+      {
+        "eventName": "Tech Innovation Awards",
+        "country": "India",
+        "scheduleType": "On-Going Event",
+        "postType": "Image",
+        "rootsPosters": ["https://placehold.co/600x400/000000/FFF?text=techAwardRoot1"],
+        "eventPosters": ["https://placehold.co/600x400/000000/FFF?text=techAwardEvent1"],
+        "termsImage": "https://placehold.co/600x400/000000/FFF?text=techAwardTerms",
+        "fromDate": "10 Mar 2024, 09:00 AM",
+        "toDate": "15 Mar 2024, 06:00 PM",
+        "category": "On Going Event"
+      },
+      {
+        "eventName": "Startup Pitch Fest",
+        "country": "Europe",
+        "scheduleType": "Completed Event",
+        "postType": "Text",
+        "rootsPosters": ["https://placehold.co/600x400/000000/FFF?text=pitchFestRoot1"],
+        "eventPosters": ["https://placehold.co/600x400/000000/FFF?text=pitchFestEvent1"],
+        "termsImage": "https://placehold.co/600x400/000000/FFF?text=pitchFestTerms",
+        "fromDate": "20 Dec 2023, 10:00 AM",
+        "toDate": "25 Dec 2023, 10:00 AM",
+        "category": "Completed Events"
+      },
+      {
+        "eventName": "Future of AI Conference 2025",
+        "country": "South Korea",
+        "scheduleType": "Up Comming Event",
+        "postType": "Text",
+        "rootsPosters": ["https://placehold.co/600x400/000000/FFF?text=aiFuture1"],
+        "eventPosters": ["https://placehold.co/600x400/000000/FFF?text=aiFutureEvent1"],
+        "termsImage": "https://placehold.co/600x400/000000/FFF?text=aiFutureTerms",
+        "fromDate": "10 Mar 2025, 10:00 AM",
+        "toDate": "12 Mar 2025, 05:00 PM",
+        "category": "Up Comming Events"
+      },
+      {
+        "eventName": "Space Exploration Symposium 2025",
+        "country": "Russia",
+        "scheduleType": "Up Comming Event",
+        "postType": "Image",
+        "rootsPosters": ["https://placehold.co/600x400/000000/FFF?text=spaceExploration1"],
+        "eventPosters": ["https://placehold.co/600x400/000000/FFF?text=spaceExplorationEvent1"],
+        "termsImage": "https://placehold.co/600x400/000000/FFF?text=spaceExplorationTerms",
+        "fromDate": "15 May 2025, 09:00 AM",
+        "toDate": "20 May 2025, 07:00 PM",
+        "category": "Up Comming Events"
+      }
+    ]
+  }
+  

@@ -1,0 +1,23 @@
+<svg id="Block_user" data-name="Block user" xmlns="http://www.w3.org/2000/svg" width="57" height="57" viewBox="0 0 57 57">
+  <g id="Group_54320" data-name="Group 54320" transform="translate(-733 -272)">
+    <path id="Path_76924" data-name="Path 76924" d="M28.5,0A28.5,28.5,0,1,1,0,28.5,28.5,28.5,0,0,1,28.5,0Z" transform="translate(733 272)" fill="#05a5c3"/>
+  </g>
+  <g id="Group_54295" data-name="Group 54295" transform="translate(-109 -65)">
+    <g id="Group_54333" data-name="Group 54333">
+      <g id="Ellipse_405" data-name="Ellipse 405" transform="translate(128.205 75.84)" fill="#f4f6fc" stroke="#f4f6fc" stroke-width="4">
+        <ellipse cx="6.084" cy="5.974" rx="6.084" ry="5.974" stroke="none"/>
+        <ellipse cx="6.084" cy="5.974" rx="4.084" ry="3.974" fill="none"/>
+      </g>
+      <path id="Subtraction_58" data-name="Subtraction 58" d="M18.926,9.815H0A14.285,14.285,0,0,1,3.451,2.788,8.243,8.243,0,0,1,9.464,0a8.241,8.241,0,0,1,6.012,2.788,14.279,14.279,0,0,1,3.451,7.026Z" transform="translate(125.01 90.67)" fill="#f4f6fc" stroke="#f4f6fc" stroke-width="4"/>
+      <g id="Ellipse_406" data-name="Ellipse 406" transform="translate(143.936 82.137)" fill="#f4f6fc" stroke="#f4f6fc" stroke-width="4">
+        <circle cx="4.267" cy="4.267" r="4.267" stroke="none"/>
+        <circle cx="4.267" cy="4.267" r="2.267" fill="none"/>
+      </g>
+      <path id="Subtraction_59" data-name="Subtraction 59" d="M12.948,5.546H0A7.631,7.631,0,0,1,2.361,1.576a6.157,6.157,0,0,1,8.227,0,7.63,7.63,0,0,1,2.361,3.97Z" transform="translate(141.742 94.084)" fill="#f4f6fc" stroke="#f4f6fc" stroke-width="4"/>
+    </g>
+    <g id="Group_54294" data-name="Group 54294" transform="translate(138.941 94.883)">
+      <path id="Subtraction_35" data-name="Subtraction 35" d="M7.058,0A7.058,7.058,0,1,1,0,7.058,7.058,7.058,0,0,1,7.058,0Z" transform="translate(0 0)" fill="none" stroke="#e8676f" stroke-width="2"/>
+      <line id="Line_288" data-name="Line 288" x1="6.414" y2="11.546" transform="translate(3.836 1.381)" fill="none" stroke="#e8676f" stroke-width="2"/>
+    </g>
+  </g>
+</svg>
