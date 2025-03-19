@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import BreadcrumbsWithFilter from "../Breadcrumbs";
 import SidebarMenu from "../SidebarMenu";
 import EventCard from "../EventCard";
+import { AppDispatch, RootState } from "../store/store";
+import { fetchUpcomingEvents } from "../store/sponsoredEventSlice";
 
 const SponsoredEvent: React.FC = () => {
   const breadcrumbLinks = [
@@ -10,72 +13,44 @@ const SponsoredEvent: React.FC = () => {
     { label: "Sponsored Event", path: "/sponsored-event" },
   ];
   const navigate = useNavigate();
+  
+  // Correctly type dispatch
+  const dispatch = useDispatch<AppDispatch>(); // ✅ Fix the dispatch type issue
 
+  // Use typed selector
+  const { events, loading, error } = useSelector((state: RootState) => state.sponsoredEvent);
+console.log(events)
   const [activeMenu, setActiveMenu] = useState("Create Event and list");
-  const [visibleEvents, setVisibleEvents] = useState<any[]>([]); // Store visible events
-  const [createdEvents, setCreatedEvents] = useState<any[]>([
-    {
-      eventName: "Music Festival 2024",
-      country: "USA",
-      scheduleType: "Up Comming Event",
-      postType: "Video",
-      rootsPosters: ["rootPoster1.jpg", "rootPoster2.jpg"],
-      eventPosters: ["eventPoster1.jpg", "eventPoster2.jpg"],
-      termsImage: "termsImage.jpg",
-      fromDate: "01 Jan 2024, 10:00 AM",
-      toDate: "05 Jan 2024, 10:00 AM",
-      category: "Up Comming Events",
-    },
-    {
-      eventName: "Tech Innovation Awards",
-      country: "India",
-      scheduleType: "On-Going Event",
-      postType: "Image",
-      rootsPosters: ["techAwardRoot1.jpg"],
-      eventPosters: ["techAwardEvent1.jpg"],
-      termsImage: "techAwardTerms.jpg",
-      fromDate: "10 Mar 2024, 09:00 AM",
-      toDate: "15 Mar 2024, 06:00 PM",
-      category: "On Going Event",
-    },
-    {
-      eventName: "Startup Pitch Fest",
-      country: "Europe",
-      scheduleType: "Completed Event",
-      postType: "Text",
-      rootsPosters: ["pitchFestRoot1.jpg"],
-      eventPosters: ["pitchFestEvent1.jpg"],
-      termsImage: "pitchFestTerms.jpg",
-      fromDate: "20 Dec 2023, 10:00 AM",
-      toDate: "25 Dec 2023, 10:00 AM",
-      category: "Completed Events",
-    },
-  ]);
+  const [visibleEvents, setVisibleEvents] = useState<any[]>([]);
+
+  // Fetch upcoming events on mount
+  useEffect(() => {
+    dispatch(fetchUpcomingEvents()); // ✅ Now it works correctly
+  }, [dispatch]);
 
   // Effect to filter events based on active menu
   useEffect(() => {
     if (activeMenu === "Create Event and list") {
-      setVisibleEvents(createdEvents); // Show all created events
+      setVisibleEvents(events);
     } else {
-      const normalizedActiveMenu = activeMenu.toLowerCase().replace(/ /g, ""); // Normalize activeMenu
-      const filtered = createdEvents.filter(event =>
+      const normalizedActiveMenu = activeMenu.toLowerCase().replace(/ /g, "");
+      const filtered = events.filter((event:any) =>
         event.category.toLowerCase().replace(/ /g, "") === normalizedActiveMenu
       );
-      setVisibleEvents(filtered); // Show events based on normalized category
+      setVisibleEvents(filtered);
     }
-  }, [activeMenu, createdEvents]);
+  }, [activeMenu, events]);
 
-  // Handle menu selection (filtering events by category)
+  // Handle menu selection
   const handleMenuClick = (menuLabel: string) => {
-    // Adjust the path to be based on the active menu
     const path = menuLabel === "" ? "/sponsored-event" : `/sponsored-event/${menuLabel}`;
     navigate(path);
-    setActiveMenu(menuLabel); // Update the active menu state
+    setActiveMenu(menuLabel);
   };
 
   // Navigate to event details
   const handleEventDetails = (event: any) => {
-    navigate("event-details", { state: { event } }); // Pass event data via state
+    navigate("event-details", { state: { event } });
   };
 
   // Menu items for filtering events by category
@@ -99,26 +74,26 @@ const SponsoredEvent: React.FC = () => {
 
         {/* Event List */}
         <div className="col-span-2 bg-white rounded shadow p-6">
-         
           <Outlet />
-{/* 
-          {visibleEvents.length > 0 ? (
+
+          {loading ? (
+            <p className="text-gray-600 text-center">Loading events...</p>
+          ) : error ? (
+            <p className="text-red-600 text-center">{error}</p>
+          ) : visibleEvents.length > 0 ? (
             visibleEvents.map((event, index) => (
               <EventCard
                 key={index}
                 title={event.eventName}
                 location={event.country}
-                handleEventClick={() => handleEventDetails(event)} 
+                handleEventClick={() => handleEventDetails(event)}
               />
             ))
           ) : (
             <p className="text-gray-600 text-center">No events available.</p>
-          )} */}
+          )}
         </div>
       </div>
-
-      {/* Outlet for nested routes */}
-      
     </div>
   );
 };
