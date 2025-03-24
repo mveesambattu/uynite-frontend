@@ -48,7 +48,7 @@ const EventDetail: React.FC = () => {
           <div>
             <span className="text-xs text-gray-500 block mb-2">Posters Display in Roots</span>
             <img
-              src={event.rootsPosters[0] || "https://placehold.co/600x400/000000/FFF?text=Poster"}
+              src={event.image.split("@")[0] || "https://placehold.co/600x400/000000/FFF?text=Poster"}
               alt="Posters Display in Roots"
               className="w-full rounded-lg"
             />
@@ -56,7 +56,7 @@ const EventDetail: React.FC = () => {
           <div>
             <span className="text-xs text-gray-500 block mb-2">Posters Display into Event</span>
             <img
-              src={event.eventPosters[0] || "https://placehold.co/600x400/000000/FFF?text=Poster"}
+              src={event.image.split[1] || "https://placehold.co/600x400/000000/FFF?text=Poster"}
               alt="Posters Display into Event"
               className="w-full rounded-lg"
             />

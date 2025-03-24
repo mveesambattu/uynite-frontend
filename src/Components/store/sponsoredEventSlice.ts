@@ -11,6 +11,8 @@ interface Event {
 interface EventState {
   activeMenu: string;
   events: Event[];
+  ongoingEvents: Event[];
+  completedEvents: Event[];
   loading: boolean;
   error: string | null;
 }
@@ -18,6 +20,8 @@ interface EventState {
 const initialState: EventState = {
   activeMenu: "Create Event",
   events: [],
+  ongoingEvents: [],
+  completedEvents: [],
   loading: false,
   error: null,
 };
@@ -44,13 +48,11 @@ export const fetchUpcomingEvents = createAsyncThunk(
   "sponsoredEvent/fetchUpcomingEvents",
   async (_, { rejectWithValue }) => {
     try {
-      // Fetch authentication token
       const token = await fetchAuthTokenFunction();
       console.log("Token fetched:", token);
 
       const response = await axios.get(
         `${API_BASE_URL}/admin/api/sponsoredEvent/67991a60c3bdaf78948095b7/getUpcomingEvents?page=0&size=10`,
-        // /admin/api/sponsoredEvent/getUpcomingEvents?page=1&size=10
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -59,12 +61,66 @@ export const fetchUpcomingEvents = createAsyncThunk(
         }
       );
 
-      return response.data.data.content; // Adjust based on actual response structure
+      return response.data.data.content;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        return rejectWithValue(
-          error.response?.data || "Failed to fetch upcoming events"
-        );
+        return rejectWithValue(error.response?.data || "Failed to fetch upcoming events");
+      }
+      return rejectWithValue("Unexpected error while fetching events.");
+    }
+  }
+);
+
+// Async thunk to fetch ongoing events
+export const fetchOngoingEvents = createAsyncThunk(
+  "sponsoredEvent/fetchOngoingEvents",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = await fetchAuthTokenFunction();
+      console.log("Token fetched:", token);
+
+      const response = await axios.get(
+        `${API_BASE_URL}/admin/api/sponsoredEvent/67991a60c3bdaf78948095b7/getOngoingEvents?page=0&size=10`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Accept-Language": "en-US",
+          },
+        }
+      );
+
+      return response.data.data.content;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(error.response?.data || "Failed to fetch ongoing events");
+      }
+      return rejectWithValue("Unexpected error while fetching events.");
+    }
+  }
+);
+
+// Async thunk to fetch completed events
+export const fetchCompletedEvents = createAsyncThunk(
+  "sponsoredEvent/fetchCompletedEvents",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = await fetchAuthTokenFunction();
+      console.log("Token fetched:", token);
+
+      const response = await axios.get(
+        `${API_BASE_URL}/admin/api/sponsoredEvent/67991a60c3bdaf78948095b7/getCompletedEvents?page=0&size=10`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Accept-Language": "en-US",
+          },
+        }
+      );
+
+      return response.data.data.content;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(error.response?.data || "Failed to fetch completed events");
       }
       return rejectWithValue("Unexpected error while fetching events.");
     }
@@ -82,32 +138,55 @@ const sponsoredEventSlice = createSlice({
       state.events.push(action.payload);
     },
     removeEvent: (state, action: PayloadAction<string>) => {
-      state.events = state.events.filter(
-        (event) => event.title !== action.payload
-      );
+      state.events = state.events.filter((event) => event.title !== action.payload);
     },
   },
   extraReducers: (builder) => {
     builder
+      // Handle Upcoming Events
       .addCase(fetchUpcomingEvents.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(
-        fetchUpcomingEvents.fulfilled,
-        (state, action: PayloadAction<Event[]>) => {
-          console.log(action.payload)
-          state.loading = false;
-          state.events = action.payload;
-        }
-      )
+      .addCase(fetchUpcomingEvents.fulfilled, (state, action: PayloadAction<Event[]>) => {
+        console.log(action.payload);
+        state.loading = false;
+        state.events = action.payload;
+      })
       .addCase(fetchUpcomingEvents.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+
+      // Handle Ongoing Events
+      .addCase(fetchOngoingEvents.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchOngoingEvents.fulfilled, (state, action: PayloadAction<Event[]>) => {
+        state.loading = false;
+        state.ongoingEvents = action.payload;
+      })
+      .addCase(fetchOngoingEvents.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+
+      // Handle Completed Events
+      .addCase(fetchCompletedEvents.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchCompletedEvents.fulfilled, (state, action: PayloadAction<Event[]>) => {
+        state.loading = false;
+        state.completedEvents = action.payload;
+      })
+      .addCase(fetchCompletedEvents.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
   },
 });
 
-export const { setActiveMenu, addEvent, removeEvent } =
-  sponsoredEventSlice.actions;
+export const { setActiveMenu, addEvent, removeEvent } = sponsoredEventSlice.actions;
 export default sponsoredEventSlice.reducer;

@@ -13,13 +13,13 @@ const SponsoredEvent: React.FC = () => {
     { label: "Sponsored Event", path: "/sponsored-event" },
   ];
   const navigate = useNavigate();
-  
+
   // Correctly type dispatch
   const dispatch = useDispatch<AppDispatch>(); // ✅ Fix the dispatch type issue
 
   // Use typed selector
   const { events, loading, error } = useSelector((state: RootState) => state.sponsoredEvent);
-console.log(events)
+  console.log(events)
   const [activeMenu, setActiveMenu] = useState("Create Event and list");
   const [visibleEvents, setVisibleEvents] = useState<any[]>([]);
 
@@ -34,7 +34,7 @@ console.log(events)
       setVisibleEvents(events);
     } else {
       const normalizedActiveMenu = activeMenu.toLowerCase().replace(/ /g, "");
-      const filtered = events.filter((event:any) =>
+      const filtered = events.filter((event: any) =>
         event.category.toLowerCase().replace(/ /g, "") === normalizedActiveMenu
       );
       setVisibleEvents(filtered);
@@ -84,7 +84,7 @@ console.log(events)
             visibleEvents.map((event, index) => (
               <EventCard
                 key={index}
-                title={event.eventName}
+                title={event.tital}
                 location={event.country}
                 handleEventClick={() => handleEventDetails(event)}
               />
